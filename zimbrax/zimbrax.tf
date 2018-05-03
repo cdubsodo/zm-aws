@@ -68,6 +68,15 @@ module "bastion" {
   swarm_security_group_id = "${module.swarm.security_group_id}"
 }
 
+module "alb" {
+  source = "./modules/alb"
+
+  vpc_id               = "${module.platform.vpc_id}"
+  public_subnet_ids    = "${module.platform.public_subnet_ids}"
+  app_certificate_id   = "${local.app_certificate_id}"
+  manager_instance_ids = "${module.swarm.manager_instance_ids}"
+}
+
 # module "app" {
 #   source = "./modules/app"
 
