@@ -19,6 +19,7 @@ resource "aws_alb_listener" "zimbra_core" {
   load_balancer_arn = "${aws_alb.app.arn}"  
   port              = "8443"  
   protocol          = "HTTPS"
+  certificate_arn   = "${local.app_certificate_id}"
   
   default_action {    
     target_group_arn = "${aws_alb_target_group.zimbra_core.arn}"
@@ -39,13 +40,6 @@ resource "aws_alb_listener_rule" "zimbra_core" {
     values = ["/"]  
   }
 }
-
-################################################################################## Certificates
-resource "aws_alb_listener_certificate" "zimbra_core" {
-  listener_arn    = "${aws_alb_listener.zimbra_core.arn}"
-  certificate_arn = "${local.app_certificate_id}"
-}
-
 
 ################################################################################## Target groups
 resource "aws_alb_target_group" "zimbra_core" {  

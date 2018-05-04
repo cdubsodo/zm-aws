@@ -78,4 +78,3 @@ module "app" {
    swarm_security_group_id = "${module.swarm.security_group_id}"
    manager_instance_ids_string = "${module.swarm.manager_instance_ids_string}"
 }
-
