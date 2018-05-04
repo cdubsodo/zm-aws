@@ -27,18 +27,6 @@ resource "aws_alb_listener" "zimbra_core" {
   }
 }
 
-resource "aws_alb_listener" "account" {  
-  load_balancer_arn = "${aws_alb.app.arn}"  
-  port              = "8081"  
-  protocol          = "HTTPS"
-  certificate_arn   = "${local.app_certificate_id}"
-  
-  default_action {    
-    target_group_arn = "${aws_alb_target_group.account.arn}"
-    type             = "forward"  
-  }
-}
-
 resource "aws_alb_listener" "zm-x-web" {  
   load_balancer_arn = "${aws_alb.app.arn}"  
   port              = "443"  
@@ -67,14 +55,14 @@ resource "aws_alb_listener_rule" "zimbra_core" {
 
 resource "aws_alb_listener_rule" "account" {
   depends_on   = ["aws_alb_target_group.account"]  
-  listener_arn = "${aws_alb_listener.account.arn}"
+  listener_arn = "${aws_alb_listener.zm-x-web.arn}"
   action {    
     type             = "forward"    
     target_group_arn = "${aws_alb_target_group.account.arn}"  
   }   
   condition {    
     field  = "path-pattern"    
-    values = ["/"]  
+    values = ["/__account*"]  
   }
 }
 
@@ -121,7 +109,7 @@ resource "aws_alb_target_group" "account" {
     unhealthy_threshold = 2    
     timeout             = 10    
     interval            = 30    
-    path                = "/"
+    path                = "/__account"
     protocol            = "HTTP"
   }
 }
