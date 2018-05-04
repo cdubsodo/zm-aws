@@ -3,7 +3,7 @@ resource "aws_alb" "app" {
   subnets            = ["${local.public_subnet_ids}"]
   load_balancer_type = "application"
   
-  security_groups = ["${aws_security_group.alb.id}"]
+  security_groups = ["${aws_security_group.app.id}"]
 
   enable_deletion_protection = true
 
@@ -57,7 +57,7 @@ resource "aws_alb_listener_rule" "zimbra_core" {
   listener_arn = "${aws_alb_listener.zimbra_core.arn}"
   action {    
     type             = "forward"    
-    target_group_arn = "${aws_alb_target_group.zimbra_core.id}"  
+    target_group_arn = "${aws_alb_target_group.zimbra_core.arn}"  
   }   
   condition {    
     field  = "path-pattern"    
@@ -70,7 +70,7 @@ resource "aws_alb_listener_rule" "account" {
   listener_arn = "${aws_alb_listener.account.arn}"
   action {    
     type             = "forward"    
-    target_group_arn = "${aws_alb_target_group.account.id}"  
+    target_group_arn = "${aws_alb_target_group.account.arn}"  
   }   
   condition {    
     field  = "path-pattern"    
@@ -83,7 +83,7 @@ resource "aws_alb_listener_rule" "zm-x-web" {
   listener_arn = "${aws_alb_listener.zm-x-web.arn}"
   action {    
     type             = "forward"    
-    target_group_arn = "${aws_alb_target_group.zm-x-web.id}"  
+    target_group_arn = "${aws_alb_target_group.zm-x-web.arn}"  
   }   
   condition {    
     field  = "path-pattern"    
@@ -102,10 +102,9 @@ resource "aws_alb_target_group" "zimbra_core" {
   health_check {    
     healthy_threshold   = 5    
     unhealthy_threshold = 2    
-    timeout             = 5    
+    timeout             = 10    
     interval            = 30    
-    path                = "/"    
-    port                = 8443
+    path                = "/"
     protocol            = "HTTPS"
   }
 }
@@ -113,18 +112,17 @@ resource "aws_alb_target_group" "zimbra_core" {
 resource "aws_alb_target_group" "account" {  
   name     = "${local.env_prefix_d}tg-account"
   port     = 8081
-  protocol = "HTTPS"  
+  protocol = "HTTP"  
   vpc_id = "${local.vpc_id}"   
 
  
   health_check {    
     healthy_threshold   = 5    
     unhealthy_threshold = 2    
-    timeout             = 5    
+    timeout             = 10    
     interval            = 30    
-    path                = "/"    
-    port                = 8081
-    protocol            = "HTTPS"
+    path                = "/"
+    protocol            = "HTTP"
   }
 }
 
@@ -138,10 +136,9 @@ resource "aws_alb_target_group" "zm-x-web" {
   health_check {    
     healthy_threshold   = 5    
     unhealthy_threshold = 2    
-    timeout             = 5    
+    timeout             = 10    
     interval            = 30    
-    path                = "/"    
-    port                = 443
+    path                = "/"
     protocol            = "HTTPS"
   }
 }

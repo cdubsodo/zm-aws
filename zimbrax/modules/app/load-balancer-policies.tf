@@ -41,3 +41,14 @@ resource "aws_security_group_rule" "alb_ingress_for_zimbra_x_web_access" {
   security_group_id = "${aws_security_group.app.id}"
   description       = "Give acces outside to the new UI for zimbra app (zm-x-web repository)"
 } 
+
+resource "aws_security_group_rule" "alb_egress_to_all" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = "${aws_security_group.app.id}"
+  description       = "ALL"
+}
