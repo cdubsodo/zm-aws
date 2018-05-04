@@ -27,6 +27,30 @@ resource "aws_alb_listener" "zimbra_core" {
   }
 }
 
+resource "aws_alb_listener" "account" {  
+  load_balancer_arn = "${aws_alb.app.arn}"  
+  port              = "8081"  
+  protocol          = "HTTPS"
+  certificate_arn   = "${local.app_certificate_id}"
+  
+  default_action {    
+    target_group_arn = "${aws_alb_target_group.account.arn}"
+    type             = "forward"  
+  }
+}
+
+resource "aws_alb_listener" "zm-x-web" {  
+  load_balancer_arn = "${aws_alb.app.arn}"  
+  port              = "443"  
+  protocol          = "HTTPS"
+  certificate_arn   = "${local.app_certificate_id}"
+  
+  default_action {    
+    target_group_arn = "${aws_alb_target_group.zm-x-web.arn}"
+    type             = "forward"  
+  }
+}
+
 ################################################################################## Listener rules
 resource "aws_alb_listener_rule" "zimbra_core" {
   depends_on   = ["aws_alb_target_group.zimbra_core"]  
@@ -34,6 +58,32 @@ resource "aws_alb_listener_rule" "zimbra_core" {
   action {    
     type             = "forward"    
     target_group_arn = "${aws_alb_target_group.zimbra_core.id}"  
+  }   
+  condition {    
+    field  = "path-pattern"    
+    values = ["/"]  
+  }
+}
+
+resource "aws_alb_listener_rule" "account" {
+  depends_on   = ["aws_alb_target_group.account"]  
+  listener_arn = "${aws_alb_listener.account.arn}"
+  action {    
+    type             = "forward"    
+    target_group_arn = "${aws_alb_target_group.account.id}"  
+  }   
+  condition {    
+    field  = "path-pattern"    
+    values = ["/"]  
+  }
+}
+
+resource "aws_alb_listener_rule" "zm-x-web" {
+  depends_on   = ["aws_alb_target_group.zm-x-web"]  
+  listener_arn = "${aws_alb_listener.zm-x-web.arn}"
+  action {    
+    type             = "forward"    
+    target_group_arn = "${aws_alb_target_group.zm-x-web.id}"  
   }   
   condition {    
     field  = "path-pattern"    
@@ -60,15 +110,54 @@ resource "aws_alb_target_group" "zimbra_core" {
   }
 }
 
-################################################################################## Target group endpoints (targets)
-resource "aws_alb_target_group_attachment" "zimbra_core_managers" {
-  target_group_arn = "${aws_alb_target_group.zimbra_core.arn}"
-  
-  # tested it works but just bind a manager_0
-  #target_id     = "${element(local.manager_instance_ids, count.index)}" 
+resource "aws_alb_target_group" "account" {  
+  name     = "${local.env_prefix_d}tg-account"
+  port     = 8081
+  protocol = "HTTPS"  
+  vpc_id = "${local.vpc_id}"   
 
-  #no tested yet, we need three managers nodes to be binded
-  target_id = "${element(split(",", local.manager_instance_ids_string), count.index)}"
-  
-  port             = 8443
+ 
+  health_check {    
+    healthy_threshold   = 5    
+    unhealthy_threshold = 2    
+    timeout             = 5    
+    interval            = 30    
+    path                = "/"    
+    port                = 8081
+    protocol            = "HTTPS"
+  }
+}
+
+resource "aws_alb_target_group" "zm-x-web" {  
+  name     = "${local.env_prefix_d}tg-zm-x-web"
+  port     = 443
+  protocol = "HTTPS"  
+  vpc_id = "${local.vpc_id}"   
+
+ 
+  health_check {    
+    healthy_threshold   = 5    
+    unhealthy_threshold = 2    
+    timeout             = 5    
+    interval            = 30    
+    path                = "/"    
+    port                = 443
+    protocol            = "HTTPS"
+  }
+}
+
+################################################################################## Target group endpoints (targets)
+resource "aws_autoscaling_attachment" "zimbra_core" {
+  alb_target_group_arn   = "${aws_alb_target_group.zimbra_core.arn}"
+  autoscaling_group_name = "${local.asg_workers_id}"
+}
+
+resource "aws_autoscaling_attachment" "account" {
+  alb_target_group_arn   = "${aws_alb_target_group.account.arn}"
+  autoscaling_group_name = "${local.asg_workers_id}"
+}
+
+resource "aws_autoscaling_attachment" "zm-x-web" {
+  alb_target_group_arn   = "${aws_alb_target_group.zm-x-web.arn}"
+  autoscaling_group_name = "${local.asg_workers_id}"
 }

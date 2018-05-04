@@ -76,5 +76,5 @@ module "app" {
    app_certificate_id      = "${local.app_certificate_id}"
    public_subnet_ids       = "${module.platform.public_subnet_ids}"
    swarm_security_group_id = "${module.swarm.security_group_id}"
-   manager_instance_ids_string = "${module.swarm.manager_instance_ids_string}"
+   asg_workers_id = "${module.swarm.asg_workers_id}"
 }

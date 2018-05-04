@@ -18,7 +18,7 @@ variable "swarm_security_group_id" {
   type = "string"
 }
 
-variable "manager_instance_ids_string" {
+variable "asg_workers_id" {
   type = "string"
 }
 
@@ -36,5 +36,5 @@ locals {
 
   swarm_security_group_id = "${var.swarm_security_group_id}"
 
-  manager_instance_ids_string = "${var.manager_instance_ids_string}"
+  asg_workers_id = "${var.asg_workers_id}"
 }

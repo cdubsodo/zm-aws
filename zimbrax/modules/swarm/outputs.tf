@@ -6,6 +6,6 @@ output "manager_instance_ids" {
   value = ["${aws_instance.manager.*.id}"]
 }
 
-output "manager_instance_ids_string" { 
-  value = "${join(",", aws_instance.manager.*.id)}" 
+output "asg_workers_id" { 
+  value = "${aws_autoscaling_group.workers.id}" 
 }
