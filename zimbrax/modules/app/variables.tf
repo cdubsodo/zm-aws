@@ -14,11 +14,11 @@ variable "app_certificate_id" {
   type = "string"
 }
 
-variable "app_instance_ids" {
-  type = "list"
+variable "swarm_security_group_id" {
+  type = "string"
 }
 
-variable "swarm_security_group_id" {
+variable "manager_instance_ids_string" {
   type = "string"
 }
 
@@ -33,7 +33,8 @@ locals {
 
   public_subnet_ids  = "${var.public_subnet_ids}"
   app_certificate_id = "${var.app_certificate_id}"
-  app_instance_ids   = "${var.app_instance_ids}"
 
   swarm_security_group_id = "${var.swarm_security_group_id}"
+
+  manager_instance_ids_string = "${var.manager_instance_ids_string}"
 }

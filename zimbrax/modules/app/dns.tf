@@ -1,14 +1,14 @@
-resource "aws_route53_record" "app" {
-  zone_id = "${local.r53_zone_id}"
-  name    = "${local.env_prefix_d}bc.lonni.me"
-  type    = "A"
-
-  alias {
-    zone_id                = "${aws_elb.app.zone_id}"
-    name                   = "${aws_elb.app.dns_name}"
-    evaluate_target_health = false
-  }
-}
+#resource "aws_route53_record" "app" {
+#  zone_id = "${local.r53_zone_id}"
+#  name    = "${local.env_prefix_d}bc.lonni.me"
+#  type    = "A"
+#
+#  alias {
+#    zone_id                = "${aws_elb.app.zone_id}"
+#    name                   = "${aws_elb.app.dns_name}"
+#    evaluate_target_health = false
+#  }
+#}
 
 # resource "aws_route53_record" "mail" {
 #   zone_id = "${local.r53_zone_id}"

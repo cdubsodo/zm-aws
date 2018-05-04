@@ -68,24 +68,14 @@ module "bastion" {
   swarm_security_group_id = "${module.swarm.security_group_id}"
 }
 
-module "alb" {
-  source = "./modules/alb"
+module "app" {
+   source = "./modules/app"
 
-  vpc_id               = "${module.platform.vpc_id}"
-  public_subnet_ids    = "${module.platform.public_subnet_ids}"
-  app_certificate_id   = "${local.app_certificate_id}"
-  manager_instance_ids = "${module.swarm.manager_instance_ids}"
+   vpc_id                  = "${module.platform.vpc_id}"
+   r53_zone_id             = "${local.r53_zone_id}"
+   app_certificate_id      = "${local.app_certificate_id}"
+   public_subnet_ids       = "${module.platform.public_subnet_ids}"
+   swarm_security_group_id = "${module.swarm.security_group_id}"
+   manager_instance_ids_string = "${module.swarm.manager_instance_ids_string}"
 }
-
-# module "app" {
-#   source = "./modules/app"
-
-
-#   vpc_id                  = "${module.platform.vpc_id}"
-#   r53_zone_id             = "${local.r53_zone_id}"
-#   app_certificate_id      = "${local.app_certificate_id}"
-#   public_subnet_ids       = "${module.platform.public_subnet_ids}"
-#   app_instance_ids        = "${module.swarm.app_instance_ids}"
-#   swarm_security_group_id = "${module.swarm.security_group_id}"
-# }
 
