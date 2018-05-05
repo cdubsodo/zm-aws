@@ -1,4 +1,4 @@
-resource "aws_security_group_rule" "app_ingress_account_api_from_all" {
+resource "aws_security_group_rule" "app_ingress_account_api_from_app_lb" {
   type              = "ingress"
   from_port         = 8081
   to_port           = 8081
@@ -19,7 +19,7 @@ resource "aws_security_group_rule" "app_ingress_https_from_all" {
   description       = "HTTPS, ZimbraX UI"
 }
 
-resource "aws_security_group_rule" "app_ingress_zimbra_core_from_all" {
+resource "aws_security_group_rule" "app_ingress_zimbra_core_from_app_lb" {
   type              = "ingress"
   from_port         = 8443
   to_port           = 8443
