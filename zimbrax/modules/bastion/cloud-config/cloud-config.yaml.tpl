@@ -30,7 +30,7 @@ yum_repos:
 write_files:
   - path: /etc/sysconfig/selinux
     content: |
-      SELINUX=enforcing
+      SELINUX=permissive
       SELINUXTYPE=targeted
   - path: /etc/profile.d/tfenv.sh
     permissions: "0755"
