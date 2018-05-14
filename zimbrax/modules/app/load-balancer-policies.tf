@@ -42,6 +42,28 @@ resource "aws_security_group_rule" "alb_ingress_for_zimbra_x_web_access" {
   description       = "Give acces outside to the new UI for zimbra app (zm-x-web repository)"
 } 
 
+resource "aws_security_group_rule" "alb_ingress_port_25_for_enable_external_mail" {
+  type              = "ingress"
+  from_port         = 25
+  to_port           = 25
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = "${aws_security_group.app.id}"
+  description       = "Enable external mail"
+} 
+
+resource "aws_security_group_rule" "alb_ingress_port_587_for_enable_external_mail" {
+  type              = "ingress"
+  from_port         = 587
+  to_port           = 587
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = "${aws_security_group.app.id}"
+  description       = "Enable external mail"
+} 
+
 resource "aws_security_group_rule" "alb_egress_to_all" {
   type              = "egress"
   from_port         = 0
