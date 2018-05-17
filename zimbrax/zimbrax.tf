@@ -68,6 +68,24 @@ module "bastion" {
   swarm_security_group_id = "${module.swarm.security_group_id}"
 }
 
+module "ldap" {
+  source = "./modules/swarm/ldap"
+
+  vpc_id               = "${module.platform.vpc_id}"
+  availability_zones   = "${local.availability_zones}"
+  private_subnet_ids   = "${module.platform.private_subnet_ids}"
+  r53_zone_id          = "${local.r53_zone_id}"
+  user_public_keys     = "${local.user_public_keys}"
+  deployer_key_pair_id = "${local.deployer_key_pair_id}"
+  file_system_id       = "${module.platform.file_system_id}"
+  db_fqdn              = "${module.platform.db_fqdn}"
+  
+  db_security_group_id          = "${module.platform.db_security_group_id}"
+  file_system_security_group_id = "${module.platform.file_system_security_group_id}"
+  cache_security_group_id       = "${module.platform.cache_security_group_id}"
+  swarm_security_group_id       = "${module.swarm.security_group_id}"
+}
+
 module "app" {
    source = "./modules/app"
 
