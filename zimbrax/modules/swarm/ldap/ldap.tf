@@ -1,5 +1,5 @@
 resource "aws_instance" "ldap" {
-  ami                         = "ami-8e6955eb"
+  ami                         = "ami-57645832"
   instance_type               = "t2.2xlarge"
   key_name                    = "${local.deployer_key_pair_id}"
   subnet_id                   = "${element(local.private_subnet_ids, count.index)}"
