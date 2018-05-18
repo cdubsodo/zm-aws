@@ -17,10 +17,6 @@ data "template_file" "mounts_sh" {
   }
 }
 
-data "template_file" "docker_daemon_sh" {
-  template = "${file("${path.module}/cloud-config/docker-daemon.sh.tpl")}"
-}
-
 data "template_cloudinit_config" "ldap_user_data" {
   gzip          = true
   base64_encode = true
@@ -35,11 +31,5 @@ data "template_cloudinit_config" "ldap_user_data" {
     content_type = "text/x-shellscript"
     filename     = "00_mounts.sh"
     content      = "${data.template_file.mounts_sh.rendered}"
-  }
-
-  part {
-    content_type = "text/x-shellscript"
-    filename     = "10_docker-daemon.sh"
-    content      = "${data.template_file.docker_daemon_sh.rendered}"
   }
 }
