@@ -51,6 +51,7 @@ packages:
   - git
   - amazon-efs-utils
   - haveged
+  - container-selinux-2.42-1.gitad8f0f7.el7
   - docker-ce
   - python-pip
   - golang

@@ -33,6 +33,7 @@ repo_upgrade: all
 packages:
   - amazon-efs-utils
   - haveged
+  - container-selinux-2.42-1.gitad8f0f7.el7
   - docker-ce
 
 write_files:
