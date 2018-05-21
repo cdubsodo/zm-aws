@@ -6,7 +6,7 @@
 * this instance has a shared `EFS` volume mounted on it:
     * Mount directory: **/mnt/blockchain**
 * This instance is not part of the docker swarm
-* Its propose is to compile, build and the deploy **Zimbra app** to the swarm.
+* Its purpose is to compile, build and the deploy **Zimbra app** to the swarm.
 * Public IP: yes
 * EIP: yes
 * Ingress ports allowed:
