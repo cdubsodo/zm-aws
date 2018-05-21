@@ -114,3 +114,12 @@ module "app" {
    swarm_security_group_id = "${module.swarm.security_group_id}"
    asg_workers_id = "${module.swarm.asg_workers_id}"
 }
+
+module "classic_app" {
+  source = "./modules/classic_app"
+
+  private_subnet_ids      = "${module.platform.private_subnet_ids}"
+  app_certificate_id      = "${local.app_certificate_id}"
+  manager_instance_ids    = "${module.swarm.manager_instance_ids}"
+  swarm_security_group_id = "${module.swarm.security_group_id}"
+}
